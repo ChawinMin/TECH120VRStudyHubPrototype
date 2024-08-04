@@ -1,0 +1,45 @@
+{
+    "name": "XRI Default Input Actions",
+    "maps": [
+        {
+            "name": "XRI Default Action Map",
+            "id": "cdb021b7-bc88-405b-8885-b2359ea2b1a7",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "4a0d9e11-784c-4af8-8dca-1f82d62ebfc0",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5f0f96f7-bf73-46b4-bf8e-323b19fd1067",
+                    "path": "<Joystick>/stick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2f638226-3cd7-49b2-a9ea-1dbb5e9ce7f2",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
