@@ -11,18 +11,70 @@ public class SettingsManager : MonoBehaviour
     public Text calendarDisplay;
     public Text timeDisplay;
 
+    private bool isDarkMode = false;
+    private Color lightModeBackgroundColor = Color.white;
+    private Color darkModeBackgroundColor = Color.black;
+    private Color lightModeTextColor = Color.black;
+    private Color darkModeTextColor = Color.white;
+
     private void Start()
     {
         settingsPanel.SetActive(false);
+        calendarDisplay.gameObject.SetActive(false);
+        timeDisplay.gameObject.SetActive(false);
 
         LoadSettings();
 
         InvokeRepeating("UpdateTimeDisplay", 0, 1);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            ToggleSettingsPanel();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            ToggleDarkMode();
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ToggleCalendarDisplay();
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            ToggleTimeDisplay();
+        }
+    }
+
     public void ToggleSettingsPanel()
     {
         settingsPanel.SetActive(!settingsPanel.activeSelf);
+    }
+
+    public void ToggleDarkMode()
+    {
+        isDarkMode = !isDarkMode;
+        darkModeToggle.isOn = isDarkMode;
+        OnDarkModeToggleChanged();
+    }
+
+    public void ToggleCalendarDisplay()
+    {
+        bool isActive = !displayCalendarToggle.isOn;
+        displayCalendarToggle.isOn = isActive;
+        OnDisplayCalendarToggleChanged();
+    }
+
+    public void ToggleTimeDisplay()
+    {
+        bool isActive = !displayTimeToggle.isOn;
+        displayTimeToggle.isOn = isActive;
+        OnDisplayTimeToggleChanged();
     }
 
     public void OnDarkModeToggleChanged()
@@ -40,8 +92,9 @@ public class SettingsManager : MonoBehaviour
 
     public void OnDisplayCalendarToggleChanged()
     {
-        calendarDisplay.gameObject.SetActive(displayCalendarToggle.isOn);
-        if (displayCalendarToggle.isOn)
+        bool isActive = displayCalendarToggle.isOn;
+        calendarDisplay.gameObject.SetActive(isActive);
+        if (isActive)
         {
             UpdateCalendarDisplay();
         }
@@ -50,38 +103,35 @@ public class SettingsManager : MonoBehaviour
 
     public void OnDisplayTimeToggleChanged()
     {
-        timeDisplay.gameObject.SetActive(displayTimeToggle.isOn);
+        bool isActive = displayTimeToggle.isOn;
+        timeDisplay.gameObject.SetActive(isActive);
         SaveSettings();
     }
 
     private void EnableDarkMode()
     {
-        // Implement dark mode enable logic, e.g., inverting colors
-        InvertColors();
+        SetColors(darkModeBackgroundColor, darkModeTextColor);
     }
 
     private void DisableDarkMode()
     {
-        // Implement dark mode disable logic, e.g., reverting colors
-        InvertColors();
+        SetColors(lightModeBackgroundColor, lightModeTextColor);
     }
 
-    private void InvertColors()
+    private void SetColors(Color backgroundColor, Color textColor)
     {
-        // Example: invert the background color of the camera
-        Camera.main.backgroundColor = new Color(1 - Camera.main.backgroundColor.r, 1 - Camera.main.backgroundColor.g, 1 - Camera.main.backgroundColor.b);
+        Camera.main.backgroundColor = backgroundColor;
 
-        // Add logic to invert colors of other UI elements
         Image[] images = FindObjectsOfType<Image>();
         foreach (Image img in images)
         {
-            img.color = new Color(1 - img.color.r, 1 - img.color.g, 1 - img.color.b);
+            img.color = backgroundColor;
         }
 
         Text[] texts = FindObjectsOfType<Text>();
         foreach (Text txt in texts)
         {
-            txt.color = new Color(1 - txt.color.r, 1 - txt.color.g, 1 - txt.color.b);
+            txt.color = textColor;
         }
     }
 
@@ -100,7 +150,7 @@ public class SettingsManager : MonoBehaviour
 
     private void SaveSettings()
     {
-        PlayerPrefs.SetInt("DarkMode", darkModeToggle.isOn ? 1 : 0);
+        PlayerPrefs.SetInt("DarkMode", isDarkMode ? 1 : 0);
         PlayerPrefs.SetInt("DisplayCalendar", displayCalendarToggle.isOn ? 1 : 0);
         PlayerPrefs.SetInt("DisplayTime", displayTimeToggle.isOn ? 1 : 0);
     }
@@ -109,7 +159,7 @@ public class SettingsManager : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("DarkMode"))
         {
-            bool isDarkMode = PlayerPrefs.GetInt("DarkMode") == 1;
+            isDarkMode = PlayerPrefs.GetInt("DarkMode") == 1;
             darkModeToggle.isOn = isDarkMode;
             if (isDarkMode)
             {
