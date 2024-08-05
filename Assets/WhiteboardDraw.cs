@@ -27,7 +27,7 @@ public class WhiteboardDraw : MonoBehaviour
     void Update()
     {
         // Check if the XR Ray Interactor is active
-        if (rayInteractor != null && rayInteractor.selectEntered)
+        if (rayInteractor != null && rayInteractor.selectEntered != null)
         {
             isDrawing = true;
         }
